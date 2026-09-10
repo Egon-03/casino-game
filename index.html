@@ -1930,7 +1930,7 @@ function feltTex(color, accent, title, sub) {
     const grd = ctx.createRadialGradient(w / 2, h / 2, 120, w / 2, h / 2, w / 2); grd.addColorStop(0, 'rgba(255,255,255,.07)'); grd.addColorStop(1, 'rgba(0,0,0,.4)'); ctx.fillStyle = grd; ctx.fillRect(0, 0, w, h);
     ctx.strokeStyle = hex6(accent); ctx.lineWidth = 7; ctx.beginPath(); ctx.arc(w / 2, h / 2, w / 2 - 34, 0, 7); ctx.stroke(); ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(w / 2, h / 2, w / 2 - 52, 0, 7); ctx.stroke();
     ctx.globalAlpha = .9; arcText(ctx, title, w / 2, h / 2, w / 2 - 92, Math.PI / 2, 46, hex6(accent));
-    ctx.globalAlpha = .55; arcText(ctx, sub || 'TORRE DELLA FORTUNA', w / 2, h / 2, w / 2 - 92, -Math.PI / 2, 34, hex6(accent)); ctx.globalAlpha = 1;
+    ctx.globalAlpha = .55; arcText(ctx, sub || 'CASINO GRASSI', w / 2, h / 2, w / 2 - 92, -Math.PI / 2, 34, hex6(accent)); ctx.globalAlpha = 1;
     ctx.strokeStyle = 'rgba(255,255,255,.18)'; ctx.lineWidth = 3; ctx.setLineDash([12, 10]); ctx.beginPath(); ctx.arc(w / 2, h / 2, w / 2 - 150, 0, 7); ctx.stroke(); ctx.setLineDash([]);
   });
 }
@@ -1997,7 +1997,7 @@ function initEngine() {
   E.low = /[?&]low/.test(location.search) || matchMedia('(pointer: coarse)').matches;
   E.renderer = new THREE.WebGLRenderer({ canvas: $('#gl'), antialias: !E.low, powerPreference: 'high-performance' });
   E.renderer.setPixelRatio(E.low ? 1 : Math.min(devicePixelRatio, 1.75)); E.renderer.shadowMap.enabled = !E.low; E.renderer.shadowMap.type = THREE.PCFSoftShadowMap; E.renderer.outputEncoding = THREE.sRGBEncoding;
-  E.renderer.toneMapping = THREE.ACESFilmicToneMapping; E.renderer.toneMappingExposure = 1.0;
+  E.renderer.toneMapping = THREE.ACESFilmicToneMapping; E.renderer.toneMappingExposure = .85;
   E.camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, .1, 200); E.camera.position.set(0, 6, 8);
   E.camPos = V3(0, 6, 8); E.camLook = V3(0, 1, 0); E.scene = new THREE.Scene(); E.clock = new THREE.Clock(); E.ray = new THREE.Raycaster(); E.pointer = new THREE.Vector2();
   makeEnv(); setupPost(); resize(); addEventListener('resize', resize);
@@ -2025,7 +2025,7 @@ function initEngine() {
 function resize() { E.camera.aspect = innerWidth / innerHeight; E.camera.updateProjectionMatrix(); E.renderer.setSize(innerWidth, innerHeight); if (E.composer) { E.composer.setSize(innerWidth, innerHeight); } }
 function setupPost() {
   if (E.low || !THREE.EffectComposer || !THREE.UnrealBloomPass) return;
-  try { E.composer = new THREE.EffectComposer(E.renderer); E.renderPass = new THREE.RenderPass(E.scene, E.camera); E.composer.addPass(E.renderPass); E.bloom = new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), .5, .45, .85); E.composer.addPass(E.bloom); } catch (e) { E.composer = null; }
+  try { E.composer = new THREE.EffectComposer(E.renderer); E.renderPass = new THREE.RenderPass(E.scene, E.camera); E.composer.addPass(E.renderPass); E.bloom = new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), .32, .4, 1.05); E.composer.addPass(E.bloom); } catch (e) { E.composer = null; }
 }
 /* ---------- effects: shake, fade, bursts ---------- */
 E.shakeAmp = 0; E.shakeT = 0;
@@ -2176,7 +2176,7 @@ function interact() { const st = nearestStation(); if (st) st.open(st); }
 function sitAtTable(st) {
   E.walkTarget = null; E.walkStation = null; const p = E.player; p.position.set(st.pos.x - 1.45, 0, st.pos.z + 1.55); p.rotation.y = Math.atan2(st.pos.x - p.position.x, st.pos.z - p.position.z);
   $('#prompt').classList.add('hidden');
-  if (E.spot) { E.spot.position.set(st.pos.x, 5.8, st.pos.z + .9); E.spot.target.position.copy(st.pos).add(V3(0, .9, 0)); tween(.6, k => { E.spot.intensity = k * .9; }); }
+  if (E.spot) { E.spot.position.set(st.pos.x, 5.8, st.pos.z + .9); E.spot.target.position.copy(st.pos).add(V3(0, .9, 0)); tween(.6, k => { E.spot.intensity = k * .55; }); }
   if (S.parts.gambe) sitPose(p, true); if (st.dealer) { st.dealer.lookAtPlayer = true; } (E.labels || []).forEach(l => l.visible = false); blink(p, 0);
 }
 function standUp() { const p = E.player; sitPose(p, false); (E.labels || []).forEach(l => l.visible = true); if (E.activeStation) { p.position.set(E.activeStation.pos.x, 0, E.activeStation.pos.z + 1.9); p.rotation.y = 0; if (E.activeStation.dealer) E.activeStation.dealer.lookAtPlayer = false; } E.activeStation = null; if (E.spot) E.spot.intensity = 0; }
@@ -2227,7 +2227,7 @@ function buildLobby() {
   const wins = []; for (let f = 0; f < 10; f++) for (let w = -3; w <= 3; w++) { if (Math.random() < .3) continue; const win = new THREE.Mesh(new THREE.PlaneGeometry(.8, 1), new THREE.MeshBasicMaterial({ color: pick([0xffd28a, 0xff4fa3, 0x37e6ff, 0xffe9a8]) })); win.position.set(w * 1.3, 3 + f * 2.7, -17.99); E.scene.add(win); wins.push(win); }
   E.updaters.push((dt, t) => { if (Math.random() < dt * 2) { const w = pick(wins); w.visible = !w.visible; } });
   const sign = box(12, 2.4, .4, mat(0x2a1015)); sign.position.set(0, 7, -17.5); E.scene.add(sign);
-  const signTxt = label('TORRE DELLA FORTUNA', { size: 1.7, color: '#ffd070', bold: true, fs: 64, bg: 'none', font: 'Alfa Slab One, Georgia, serif' }); signTxt.position.set(0, 7, -17.1); E.scene.add(signTxt);
+  const signTxt = label('CASINÒ GRASSI', { size: 1.7, color: '#ffd070', bold: true, fs: 64, bg: 'none', font: 'Alfa Slab One, Georgia, serif' }); signTxt.position.set(0, 7, -17.1); E.scene.add(signTxt);
   const neon = new THREE.PointLight(0xffb060, 1.4, 30, 1.2); neon.position.set(0, 7, -15); E.scene.add(neon);
   E.updaters.push((dt, t) => { const fl = Math.random() < .03 ? .3 : 1; neon.intensity = 1.2 * fl + Math.sin(t * 8) * .1; signTxt.material.opacity = .75 * fl + .25; });
   // Murena booth
@@ -2291,8 +2291,8 @@ function enterFloor(id) {
     const n = Math.floor(len / 3.2); for (let i = 0; i < n; i++) { const o = (i - (n - 1) / 2) * 3.2; const px = ry ? x : x + o, pz = ry ? z + o : z; const fr = box(1.4, 1, .08, trimM); fr.position.set(px, 2.3, pz); fr.rotation.y = ry; E.scene.add(fr); const pic = box(1.2, .8, .1, new THREE.MeshStandardMaterial({ color: pick([0x8a1c2b, 0x1d4a6a, 0x2f7a4a, 0x6a3a8a, 0xb0782a]), emissive: 0x111111, roughness: .9 })); pic.position.set(px, 2.3, pz); pic.rotation.y = ry; E.scene.add(pic);
       const sc = sph(.08, mat(0xffffff, { emissive: f.light, emissiveIntensity: 2 })); sc.position.set(px + (ry ? (x > 0 ? -.2 : .2) : 0), 3.1, pz + (ry ? 0 : (z > 0 ? -.2 : .2))); E.scene.add(sc); }
   });
-  [[-8, 0], [0, 0], [8, 0]].forEach(([x, z]) => { const pl = new THREE.PointLight(f.light, id === 2 ? .55 : .8, 20, 1.3); pl.position.set(x, 5.6, z); E.scene.add(pl);
-    const ch = new THREE.Group(); ch.position.set(x, 6.1, z); const ring = new THREE.Mesh(new THREE.TorusGeometry(.7, .05, 8, 32), mat(f.accent, { metalness: .9, roughness: .2 })); ring.rotation.x = Math.PI / 2; ch.add(ring); const core = sph(.22, mat(0xffffff, { emissive: f.light, emissiveIntensity: 1.6 })); ch.add(core);
+  [[-8, 0], [0, 0], [8, 0]].forEach(([x, z]) => { const pl = new THREE.PointLight(f.light, id === 2 ? .42 : .6, 20, 1.3); pl.position.set(x, 5.6, z); E.scene.add(pl);
+    const ch = new THREE.Group(); ch.position.set(x, 6.1, z); const ring = new THREE.Mesh(new THREE.TorusGeometry(.7, .05, 8, 32), mat(f.accent, { metalness: .9, roughness: .2 })); ring.rotation.x = Math.PI / 2; ch.add(ring); const core = sph(.22, mat(0xffffff, { emissive: f.light, emissiveIntensity: 1 })); ch.add(core);
     for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; const cr = new THREE.Mesh(new THREE.OctahedronGeometry(.07), mat(0xffffff, { metalness: .9, roughness: .05, envMapIntensity: 1.5, transparent: true, opacity: .85 })); cr.position.set(Math.cos(a) * .7, -.25 - (i % 2) * .15, Math.sin(a) * .7); ch.add(cr); }
     const chain = cyl(.02, .02, .9, mat(0x222222)); chain.position.y = .45; ch.add(chain); E.scene.add(ch); E.spin.push({ obj: ch, axis: 'y', speed: .25 }); });
   const DN = E.low ? 120 : 320; const dp = new Float32Array(DN * 3); for (let i = 0; i < DN; i++) { dp[i * 3] = (Math.random() - .5) * 25; dp[i * 3 + 1] = Math.random() * 5; dp[i * 3 + 2] = (Math.random() - .5) * 17; }
