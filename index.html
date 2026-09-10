@@ -2137,10 +2137,13 @@ function updatePlayer(dt) {
   if (moving) {
     x /= Math.max(1, L); z /= Math.max(1, L); const speed = S.parts.gambe ? 4.6 : 2.6;
     p.position.x += x * speed * dt; p.position.z += z * speed * dt; p.rotation.y = Math.atan2(x, z);
-    if (!S.parts.gambe) p.parts.roll.rotation.x += speed * dt * 2.2;
+    if (!S.parts.gambe) p.parts.roll.rotation.x += speed * dt * 1.4;
     p.dustT = (p.dustT || 0) + dt; if (p.dustT > .22) { p.dustT = 0; burst(p.position.clone().add(V3(0, .05, 0)), { n: 3, colors: [0x8a7a6a, 0x6a5a4a], size: .035, speed: .6, up: .5, g: 1.5, dur: .5 }); }
     const b = E.bounds; p.position.x = clamp(p.position.x, b.x0, b.x1); p.position.z = clamp(p.position.z, b.z0, b.z1);
     E.obstacles.forEach(o => { const dx = p.position.x - o.x, dz = p.position.z - o.z; const d = Math.hypot(dx, dz), min = o.r + .35; if (d < min && d > 1e-4) { p.position.x = o.x + dx / d * min; p.position.z = o.z + dz / d * min; } });
+  } else if (!S.parts.gambe) {
+    const upright = Math.round(p.parts.roll.rotation.x / (Math.PI * 2)) * Math.PI * 2;
+    p.parts.roll.rotation.x += (upright - p.parts.roll.rotation.x) * Math.min(1, dt * 8);
   }
   animatePerson(p, moving && S.parts.gambe, dt);
 }
