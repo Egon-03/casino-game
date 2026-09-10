@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Torre della Fortuna 3D — casino crawler in solitaria</title>
+<title>Casinò Grassi — casino crawler in solitaria</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
@@ -225,11 +225,11 @@ body.drunk #gl{animation:sway 3s ease-in-out infinite}
   <div id="sheet" class="hidden"><div class="sheet-head"><h2 id="sheetTitle"></h2><button class="ghost" id="sheetClose">Chiudi</button><span class="rules" id="sheetRules"></span></div><div class="sheet-body" id="sheetBody"></div></div>
 
   <div id="titleScr" class="overlay">
-    <div class="marquee"><h1>Torre della Fortuna 3D</h1></div>
+    <div class="marquee"><h1>Casinò Grassi</h1></div>
     <div class="story">
       <p>Hai firmato qualcosa. Non ricordi bene cosa. Era una serata lunga.</p>
       <p>Ora il Dottor Murena vuole <b>$30.000</b> e ti concede <b>otto giorni</b>. Ogni sera passa a controllare che il tuo conto sia cresciuto quanto dice lui. Se non lo è, si prende un pezzo di te. Letteralmente.</p>
-      <p>La buona notizia: la sua Torre della Fortuna è aperta e hai <b>cinque minuti</b> al giorno per giocarti tutto. La cattiva: il banco vince sempre. Quasi.</p>
+      <p>La buona notizia: il suo Casinò Grassi è aperto e hai <b>cinque minuti</b> al giorno per giocarti tutto. La cattiva: il banco vince sempre. Quasi.</p>
     </div>
     <div class="setup">
       <label>Durata giornata <select id="dayLen"><option value="300">5 minuti (originale)</option><option value="180">3 minuti (veloce)</option><option value="480">8 minuti (comodo)</option></select></label>
@@ -3045,7 +3045,7 @@ function renderEnding(kind) {
   const root = $('#finale');
   const Ex = {
     paid: { art: '🌅', title: 'Finale 1 — Libero', text: `Hai pagato ${fmt(S.debt)}. Il Murena ha sorriso, che è peggio di quando non sorride, e ti ha stretto la mano. Esci nel parcheggio con ${fmt(Math.max(0, S.bank - S.debt))} e ${partsLeft().length} parti del corpo su 5. Non tornerai mai più. Fino a martedì.` },
-    double: { art: '🏆', title: 'Finale 2 — Il colpo del secolo', text: `Testa. Il Murena ha guardato la moneta per dieci secondi buoni, poi ha strappato il contratto e ti ha consegnato ${fmt(S.bank * 2)} in una busta della spesa. Sei uscito dalla Torre della Fortuna come proprietario. È fallita il mese dopo, ma per colpa tua.` },
+    double: { art: '🏆', title: 'Finale 2 — Il colpo del secolo', text: `Testa. Il Murena ha guardato la moneta per dieci secondi buoni, poi ha strappato il contratto e ti ha consegnato ${fmt(S.bank * 2)} in una busta della spesa. Sei uscito dal Casinò Grassi come proprietario. È fallita il mese dopo, ma per colpa tua.` },
     lost: { art: '🪦', title: 'Finale 3 — La moneta', text: `Croce. Il Murena ha tenuto la parola: ti ha lasciato la moneta. È l'unica cosa che hanno trovato nella tua tasca. Sulla lapide c'è scritto "Era quasi a posto". Il tuo conto migliore: ${fmt(Math.max(...(S.hist || []).map(h => h.bank), S.bank))}.` },
     grave: { art: '⚰️', title: 'Fine — Il cimitero', text: `Quota mancata una volta di troppo. Il becchino fa lo sconto, il Murena no. Sei arrivato al giorno ${S.day} con ${fmt(S.bank)} in banca e ${partsLeft().length} pezzi su 5. La lapide dice "Ancora un giro".` },
   }[kind];
