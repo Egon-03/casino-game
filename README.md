@@ -4,10 +4,11 @@ Casino crawler in solitaria — gioco HTML5 a file singolo, giocabile direttamen
 
 ## Come giocarci online (GitHub Pages)
 
-1. Vai su **Settings → Pages** in questo repository.
-2. In "Build and deployment", scegli **Source: Deploy from a branch**.
-3. Seleziona il branch `main` (o quello in cui è stato mergiato `index.html`) e cartella `/ (root)`.
-4. Salva: dopo circa un minuto il gioco sarà online su `https://<utente>.github.io/casino-game/`.
+Il repository include un workflow (`.github/workflows/pages.yml`) che pubblica automaticamente il sito su GitHub Pages a ogni push su `main`. Dopo il primo merge/push su `main`, il gioco sarà raggiungibile su:
+
+`https://<utente>.github.io/casino-game/`
+
+(controlla in **Settings → Pages** l'URL esatto e lo stato del deploy; in **Actions** trovi il log del workflow "Deploy to GitHub Pages").
 
 ## Come giocarci in locale
 
